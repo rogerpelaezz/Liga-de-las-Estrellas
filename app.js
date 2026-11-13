@@ -1,3 +1,77 @@
+'use strict';
+(() => {
+  const SOURCE = window.LIGA_DATA;
+  if (!SOURCE) {
+    document.body.insertAdjacentHTML('afterbegin','<p style="padding:20px;color:red">No se pudo cargar data.js.</p>');
+    return;
+  }
+  const state = { phase: 'total', demo: false };
+  const $ = selector => document.querySelector(selector);
+  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const safeColor = value => /^#[a-fA-F0-9]{6}$/.test(value || '') ? value : '#8c99aa';
+  const hasScore = match => Number.isFinite(match.golesLocal) && Number.isFinite(match.golesVisitante) && match.golesLocal >= 0 && match.golesVisitante >= 0;
+  const findTeam = (data, id) => data.equipos.find(team => team.id === id) || { corto:'Equipo', nombre:'Equipo desconocido', color:'#8c99aa' };
+  const validPhase = (match) => state.phase === 'total' || match.fase === state.phase;
+  const phaseTitle = () => ({total:'Todo el torneo',liga:'Liga regular',playoff:'Playoffs'}[state.phase]);
+
+  const ICONS = {
+    zamora: '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="m16 3 11 4.5v8.2C27 23.4 22.1 27.7 16 30 9.9 27.7 5 23.4 5 15.7V7.5L16 3Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.5 15.6 3.5 3.5 6.2-6.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    pichichi: '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="12.5" stroke="currentColor" stroke-width="1.8"/><path d="m16 8 5.8 4.2-2.2 6.8h-7.2l-2.2-6.8L16 8Z" stroke="currentColor" stroke-width="1.5"/><path d="M16 3.5V8M28 13l-6.2-.8M22.8 26l-3.2-7M9.2 26l3.2-7M4 13l6.2-.8" stroke="currentColor" stroke-width="1.5"/></svg>',
+    asistencias: '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M4 23 13 14l6 6 9-11" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 9h8v8" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="9" r="3" stroke="currentColor" stroke-width="1.6"/></svg>',
+    sucio: '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="5" y="5" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="8" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M15 9v13" stroke="currentColor" stroke-width="1.8"/></svg>'
+  };
+
+  const awards = [
+    { key:'zamora', name:'ZAMORA', subtitle:'El muro que menos concede', color:'gold', rankTitle:'Zamora', rankDesc:'Menor media de goles encajados', column:'GC/PJ', footer:'Se exige un mínimo de partidos como portero.' },
+    { key:'pichichi', name:'PICHICHI', subtitle:'El instinto delante de portería', color:'cyan', rankTitle:'Pichichi', rankDesc:'Máximos goleadores', column:'GOLES', footer:'Desempate: asistencias y menos partidos jugados.' },
+    { key:'asistencias', name:'PLAYMAKER', subtitle:'Los pases que fabrican goles', color:'purple', rankTitle:'Máximos asistentes', rankDesc:'Quienes encuentran el último pase', column:'ASIST.', footer:'Desempate: goles y menos partidos jugados.' },
+    { key:'sucio', name:'CARNICERO', subtitle:'La tarjeta también tiene dueño', color:'red', rankTitle:'Jugador sucio', rankDesc:'La clasificación menos honorable', column:'PUNTOS', footer:'Amarilla = 1 punto · Roja directa = 3 puntos.' }
+  ];
+
+  function demoData() {
+    const data = JSON.parse(JSON.stringify(SOURCE));
+    const players = [
+      ['b-gk','Portero Bayern','bayern','POR'],['b-9','Delantero Bayern','bayern','DEL'],['b-10','Creador Bayern','bayern','MED'],
+      ['c-gk','Portero Crystal','crystal','POR'],['c-9','Delantero Crystal','crystal','DEL'],['c-10','Creador Crystal','crystal','MED'],
+      ['a-gk','Portero Aston','aston','POR'],['a-9','Delantero Aston','aston','DEL'],['a-10','Creador Aston','aston','MED'],
+      ['l-gk','Portero Cultural','cultural','POR'],['l-9','Delantero Cultural','cultural','DEL'],['l-10','Creador Cultural','cultural','MED']
+    ];
+    data.jugadores = players.map(([id,nombre,equipo,posicion])=>({id,nombre,equipo,posicion}));
+    const goal = (jugador,asistente=null)=>({tipo:'gol',jugador,asistente});
+    const yellow = jugador => ({tipo:'amarilla',jugador});
+    const red = jugador => ({tipo:'roja',jugador});
+    const demoMatches = {
+      L1A: [3,2,[goal('b-9','b-10'),goal('b-9','b-10'),goal('b-10','b-9'),goal('c-9','c-10'),goal('c-9','c-10'),yellow('b-10'),yellow('c-10')]],
+      L1B: [1,1,[goal('a-9','a-10'),goal('l-9','l-10'),yellow('a-9')]],
+      L2A: [0,1,[goal('b-9','b-10'),yellow('l-10'),yellow('b-9')]],
+      L2B: [2,4,[goal('c-9','c-10'),goal('c-10','c-9'),goal('a-9','a-10'),goal('a-9','a-10'),goal('a-9','a-10'),goal('a-10','a-9'),red('a-10'),yellow('c-9')]],
+      L3A: [2,0,[goal('b-9','b-10'),goal('b-10','b-9'),yellow('a-9'),yellow('a-9')]],
+      L3B: [1,3,[goal('l-9','l-10'),goal('c-9','c-10'),goal('c-9','c-10'),goal('c-10','c-9'),red('l-10')]]
+    };
+    const playerIDs = Object.fromEntries(data.equipos.map(team=>[team.id, data.jugadores.filter(player=>player.equipo===team.id).map(player=>player.id)]));
+    for (const match of data.partidos) {
+      const sample = demoMatches[match.id];
+      if (!sample) continue;
+      match.golesLocal = sample[0];
+      match.golesVisitante = sample[1];
+      match.eventos = sample[2];
+      match.participantes = [...playerIDs[match.local], ...playerIDs[match.visitante]];
+      match.porteros = {local:playerIDs[match.local].find(id=>id.endsWith('gk')),visitante:playerIDs[match.visitante].find(id=>id.endsWith('gk'))};
+    }
+    return data;
+  }
+  const DEMO = demoData();
+  const activeData = () => window.LIGA_CORE.enrich(state.demo ? DEMO : SOURCE);
+
+  function calculate(data) {
+    const selected = data.partidos.filter(validPhase);
+    const completed = selected.filter(hasScore);
+    const minimumGK = state.phase === 'playoff' ? 1 : (data.reglas.minimoPartidosZamora || 3);
+    const players = new Map(data.jugadores.map(j => [j.id, { ...j, partidos:0,goles:0,asistencias:0,amarillas:0,rojas:0,puntos:0,partidosPortero:0,encajados:0,media:null }]));
+    const goalsScored = completed.reduce((acc,m)=>acc + m.golesLocal + m.golesVisitante,0);
+    const goalEvents = completed.reduce((acc,m)=>acc + (m.eventos||[]).filter(ev=>ev.tipo==='gol'||ev.tipo==='autogol').length,0);
+    let missingEvents = Math.max(0, goalsScored-goalEvents);
+    for (const match of completed) {
       const participants = new Set(match.participantes || []);
       const goalkeepers = match.porteros || {};
       for (const side of ['local','visitante']) {
