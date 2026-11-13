@@ -15,6 +15,16 @@
   <script src="core.js" defer></script>
 <script src="app.js?v=descripciones-1" defer></script>
 <script src="site.js" defer></script>
+<style>
+body[data-page="estadisticas"] .hero{background:#0b1424 linear-gradient(90deg,rgba(11,20,36,.97) 0%,rgba(11,20,36,.88) 35%,rgba(11,20,36,.55) 64%,rgba(11,20,36,.35) 100%),url("assets/estadisticas-hero.png") center center/cover no-repeat}
+body[data-page="estadisticas"] .hero:before,body[data-page="estadisticas"] .hero:after,body[data-page="estadisticas"] .hero-orbit{display:none}
+body[data-page="estadisticas"] .hero-grid{grid-template-columns:minmax(0,650px);min-height:365px}
+.stats-audio-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:24px}
+.stats-audio-controls button{border:1px solid #e5bf6799;background:#0d1524cc;color:#fff;border-radius:8px;padding:10px 14px;font-size:11px;font-weight:800}
+.stats-audio-controls button:hover{background:#e5bf67;color:#0d1524}
+.stats-audio-controls span{color:#c4ceda;font-size:11px}
+@media(max-width:560px){body[data-page="estadisticas"] .hero{background-image:linear-gradient(180deg,rgba(11,20,36,.94) 0%,rgba(11,20,36,.86) 55%,rgba(11,20,36,.55) 100%),url("assets/estadisticas-hero.png");background-position:center,65% center}body[data-page="estadisticas"] .hero-grid{min-height:0}.stats-audio-controls{margin-top:20px}}
+</style>
 </head>
 <body data-page="estadisticas">
   <div class="announcement"><span class="pulse"></span> TEMPORADA 2026/27 <span class="announcement-line"></span> I EDICIÓN DEL CAMPEONATO</div>
@@ -39,10 +49,7 @@
             <div class="hero-kicker">CENTRO DE ESTADÍSTICAS <span>·</span> EDICIÓN I</div>
             <h1>LOS NÚMEROS<br><span>TAMBIÉN</span> JUEGAN.</h1>
             <p class="hero-copy">Goles que valen oro. Pases que cambian partidos. Paradas imposibles. Y alguna tarjeta de más. Aquí se escribe la historia de la liga.</p>
-          </div>
-          <div class="hero-emblem" aria-hidden="true">
-            <div class="emblem-outer"><div class="emblem-inner"><span class="emblem-star">★</span><span class="emblem-num">01</span><span class="emblem-label">SEASON</span></div></div>
-            <div class="emblem-sub">THE STARS LEAGUE</div>
+            <div class="stats-audio-controls" aria-label="Música de Estadísticas"><button type="button" id="stats-audio-play" aria-label="Reproducir música">▶ Reproducir</button><button type="button" id="stats-audio-mute" aria-label="Silenciar música">🔊 Silenciar</button><span>Kasabian · Club Foot</span></div>
           </div>
         </div>
         <div class="hero-bottom">
@@ -100,5 +107,29 @@
 
   <footer class="footer"><div class="container footer-content"><div><span class="footer-star">✦</span> I LIGA DE LAS ESTRELLAS <span class="footer-separator">/</span> TEMPORADA 2026/27</div><span><a href="admin.html">Zona de gestión</a> · 4 EQUIPOS · 1 CAMPEÓN</span></div></footer>
   <div class="toast" role="status" aria-live="polite" id="toast"></div>
+<audio id="stats-audio" src="assets/club-foot-edit.mp3" preload="none" loop></audio>
+  <script>
+  (() => {
+    const audio = document.getElementById('stats-audio');
+    const play = document.getElementById('stats-audio-play');
+    const mute = document.getElementById('stats-audio-mute');
+    const update = () => {
+      const playing = !audio.paused;
+      play.textContent = playing ? '❚❚ Pausar' : '▶ Reproducir';
+      play.setAttribute('aria-label', playing ? 'Pausar música' : 'Reproducir música');
+      mute.textContent = audio.muted ? '🔇 Activar sonido' : '🔊 Silenciar';
+      mute.setAttribute('aria-label', audio.muted ? 'Activar sonido' : 'Silenciar música');
+    };
+    play.addEventListener('click', async () => {
+      if (audio.paused) { try { await audio.play(); } catch (error) { console.warn('No se pudo reproducir el audio', error); } }
+      else audio.pause();
+      update();
+    });
+    mute.addEventListener('click', () => { audio.muted = !audio.muted; update(); });
+    audio.addEventListener('play', update);
+    audio.addEventListener('pause', update);
+    update();
+  })();
+  </script>
 </body>
 </html>
