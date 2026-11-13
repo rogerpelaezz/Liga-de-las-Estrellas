@@ -105,3 +105,16 @@ body[data-page="estadisticas"] .award-card:first-child {
     background-size: cover, auto 90%;
   }
 }
+
+
+body[data-page="estadisticas"] .award-card:first-child {
+  background-image: linear-gradient(90deg, rgba(11,20,36,.97) 0%, rgba(11,20,36,.90) 43%, rgba(11,20,36,.45) 100%), url("assets/zamora-sin-fondo.png");
+  background-size: cover, auto 76%;
+  background-position: center, right bottom;
+}
+
+@media (max-width: 700px) {
+  body[data-page="estadisticas"] .award-card:first-child {
+    background-size: cover, auto 70%;
+  }
+}
