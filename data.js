@@ -32,6 +32,7 @@ window.LIGA_DATA = {
     { id: 'aston', nombre: 'Aston Birra', corto: 'Aston Birra', sigla: 'AST', color: '#52ad84' },
     { id: 'cultural', nombre: 'Cultural y Alcohólica Leonesa', corto: 'Cultural', sigla: 'CUL', color: '#343d49' }
   ],
+  // Foto: imagen JPG/PNG/WebP comprimida incorporada como data URL desde admin.html.
   // Por completar: { id:'b1', nombre:'...', equipo:'bayern', posicion:'POR', dorsal:1, foto:null }
   jugadores: [],
   partidos: [

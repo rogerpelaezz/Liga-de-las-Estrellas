@@ -5,6 +5,8 @@
  const data=C.enrich(source), st=data._table,$=id=>document.getElementById(id);
  const e=C.esc,score=C.score,teamName=(id,short=true)=>C.teamName(data,id,short),t=id=>C.team(data,id);
  const logo=(id,big=false)=>`<span class="team-emblem real ${big?'big':''}" style="--team:${C.esc(t(id)?.color||'#8d98aa')}" aria-hidden="true">${['bayern','crystal','aston','cultural'].includes(id)?`<img alt="" src="assets/${id}.webp" loading="lazy">`:e(t(id)?.sigla||'??')}</span>`;
+ const initials=name=>String(name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+ const safePhoto=src=>typeof src==='string' && (/^data:image\/(?:webp|jpeg|png);base64,[a-z0-9+/=]+$/i.test(src)||/^assets\/jugadores\/[a-z0-9_.-]+\.(?:webp|png|jpg|jpeg)$/i.test(src))?src:null;
  const metrics=(list)=>list.map(x=>`<div class="metric"><b>${e(x[0])}</b><span>${e(x[1])}</span></div>`).join('');
  const leagueKPIs=()=>metrics([[st.played+'/12','PARTIDOS DISPUTADOS'],[data.equipos.length,'EQUIPOS PARTICIPANTES'],['6','JORNADAS DE LIGA'],['4','PARTIDOS DE PLAYOFFS']]);
  const currentResults=data.partidos.filter(m=>m.fase==='liga'&&score(m));
@@ -18,7 +20,7 @@
  }
  function teamcard(r,full=false){
   const roster=data.jugadores.filter(j=>j.equipo===r.id),caps=roster.filter(j=>j.capitan).slice(0,2);
-  return `<article class="team-card" style="--team:${e(r.color)}"><div class="team-color"></div>${logo(r.id,true)}<h2 class="team-name">${e(r.nombre)}</h2><span class="team-subtitle">${e(r.sigla)} · ${e(({'bayern':'Roja','crystal':'Blanca','aston':'Verde','cultural':'Negra'})[r.id]||'')}</span>${full?`<div class="captain-list"><strong>CAPITANES</strong>${[0,1].map(i=>`<span>${i+1}. ${caps[i]?e(caps[i].nombre):'Por designar'}</span>`).join('')}</div><div class="roster"><h3>PLANTILLA · ${roster.length} JUGADORES</h3>${roster.length?`<ul>${roster.map(j=>`<li>${e(j.nombre)}${j.dorsal!==null&&j.dorsal!==undefined?' · Nº '+e(j.dorsal):''}${j.capitan?' · Capitán':''}</li>`).join('')}</ul>`:'<p class="empty-note">Pendiente de completar.</p>'}</div>`:`<span class="team-foot">${roster.length} jugadores inscritos · ${caps.length}/2 capitanes</span>`}</article>`;
+  return `<article class="team-card" style="--team:${e(r.color)}"><div class="team-color"></div>${logo(r.id,true)}<h2 class="team-name">${e(r.nombre)}</h2><span class="team-subtitle">${e(r.sigla)} · ${e(({'bayern':'Roja','crystal':'Blanca','aston':'Verde','cultural':'Negra'})[r.id]||'')}</span>${full?`<div class="captain-list"><strong>CAPITANES</strong>${[0,1].map(i=>`<span>${i+1}. ${caps[i]?e(caps[i].nombre):'Por designar'}</span>`).join('')}</div><div class="roster"><h3>PLANTILLA · ${roster.length} JUGADORES</h3>${roster.length?`<div class="team-roster-grid">${roster.map(j=>`<a class="team-player-link" href="quien-soy.html?jugador=${encodeURIComponent(j.id)}"><span class="team-player-photo">${safePhoto(j.foto)?`<img src="${e(safePhoto(j.foto))}" loading="lazy" alt="Foto de ${e(j.nombre)}">`:e(initials(j.nombre))}</span><span><strong>${e(j.nombre)}</strong><small>${j.dorsal!==null&&j.dorsal!==undefined?'Nº '+e(j.dorsal)+' · ':''}${e(j.posicion||'')}${j.capitan?' · Capitán':''}</small></span></a>`).join('')}</div>`:'<p class="empty-note">Pendiente de completar.</p>'}</div>`:`<span class="team-foot">${roster.length} jugadores inscritos · ${caps.length}/2 capitanes</span>`}</article>`;
  }
  function playoffMatch(m,placeholders){
   const lead=m.id==='P-FI'?'GRAN FINAL':m.id==='P-BR'?'TERCER PUESTO':C.playoffNames[m.id].toUpperCase();

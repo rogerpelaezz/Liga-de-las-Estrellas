@@ -88,12 +88,54 @@
     const outstanding=gh!==''&&goalEvents!==Number(gh)+Number(ga);
     showToast(outstanding?'Acta guardada. Faltan goles individuales para completar premios.':'Acta guardada en el editor. Descarga el archivo para publicar.');
   }
+  const initials=name=>String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
+  const safePhoto=src=>typeof src==='string'&&(/^data:image\/(?:webp|jpeg|png);base64,[a-z0-9+/=]+$/i.test(src)||/^assets\/jugadores\/[a-z0-9_.-]+\.(?:webp|png|jpe?g)$/i.test(src))?src:null;
+  async function compactPhoto(file){
+    if(!file||!['image/jpeg','image/png','image/webp','image/heic','image/heif'].includes(file.type))throw Error('Usa una imagen JPG, PNG, WebP o HEIC compatible.');
+    if(file.size>12*1024*1024)throw Error('La imagen pesa más de 12 MB.');
+    const url=URL.createObjectURL(file);
+    const img=new Image();
+    try{
+      await new Promise((resolve,reject)=>{
+        img.onload=resolve;img.onerror=()=>reject(Error('No se pudo leer la imagen. Si es HEIC, conviértela a JPG.'));img.src=url;
+      });
+      const sw=img.naturalWidth,sh=img.naturalHeight;
+      if(!sw||!sh||sw*sh>80_000_000)throw Error('La resolución de la foto no es válida.');
+      // Recorte 4:5 centrado. La imagen se reduce antes de incorporarla a data.js.
+      const aspect=4/5,sourceAspect=sw/sh;
+      const cw=sourceAspect>aspect?sh*aspect:sw,ch=sourceAspect>aspect?sh:sw/aspect;
+      const sx=(sw-cw)/2,sy=Math.max(0,(sh-ch)*0.28);
+      let targetWidth=400,quality=.77;
+      for(let tries=0;tries<7;tries++){
+        const canvas=document.createElement('canvas');canvas.width=targetWidth;canvas.height=Math.round(targetWidth/aspect);
+        const ctx=canvas.getContext('2d');if(!ctx)throw Error('No se pudo procesar esta foto.');
+        ctx.fillStyle='#edf0f5';ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,sx,sy,cw,ch,0,0,canvas.width,canvas.height);
+        let src=canvas.toDataURL('image/webp',quality);
+        if(!src.startsWith('data:image/webp;'))src=canvas.toDataURL('image/jpeg',quality);
+        if(src.length<170_000)return src;
+        quality=Math.max(.5,quality-.09);targetWidth=Math.max(250,Math.round(targetWidth*.88));
+      }
+      throw Error('No se pudo reducir la fotografía lo suficiente.');
+    } finally {URL.revokeObjectURL(url);}
+  }
   function renderRoster(){
     $('player-team').innerHTML=teamOptions($('player-team').value);
-    $('admin-player-list').innerHTML=model.equipos.map(team=>{
-      const roster=model.jugadores.filter(j=>j.equipo===team.id);
-      return `<div class="form-section"><h3>${esc(team.nombre)} <span class="muted">(${roster.length})</span></h3>${!roster.length?'<p class="empty-note">Sin inscripciones.</p>':roster.map(j=>`<div class="admin-player-row"><span><strong>${esc(j.nombre)}</strong><span class="muted"> · ${esc(j.posicion||'')} ${j.dorsal==null?'':'· Nº '+esc(j.dorsal)}</span></span><label class="form-check"><input type="checkbox" data-captain="${esc(j.id)}" ${j.capitan?'checked':''}> Capitán</label><button class="danger-btn" data-delete-player="${esc(j.id)}" type="button">Eliminar</button></div>`).join('')}</div>`;
+    $('admin-player-list').innerHTML=model.equipos.map(t=>{
+      const roster=model.jugadores.filter(j=>j.equipo===t.id);
+      return `<div class="form-section"><h3>${esc(t.nombre)} <span class="muted">(${roster.length})</span></h3>${!roster.length?'<p class="empty-note">Sin inscripciones.</p>':roster.map(j=>{
+        const src=safePhoto(j.foto);
+        return `<div class="admin-player-row"><div class="admin-player-details"><span class="admin-avatar">${src?`<img alt="Foto de ${esc(j.nombre)}" src="${esc(src)}">`:esc(initials(j.nombre))}</span><span class="admin-player-name"><strong>${esc(j.nombre)}</strong><span class="muted"> · ${esc(j.posicion||'')} ${j.dorsal==null?'':'· Nº '+esc(j.dorsal)}</span></span></div><div class="admin-player-actions"><label class="form-check"><input type="checkbox" data-captain="${esc(j.id)}" ${j.capitan?'checked':''}> Capitán</label><button type="button" class="photo-button" data-upload-photo="${esc(j.id)}">${src?'Cambiar foto':'Añadir foto'}</button>${src?`<button type="button" class="photo-button" data-remove-photo="${esc(j.id)}">Quitar foto</button>`:''}<button class="danger-btn" data-delete-player="${esc(j.id)}" type="button">Eliminar</button></div></div>`;
+      }).join('')}</div>`;
     }).join('');
+    document.querySelectorAll('[data-upload-photo]').forEach(button=>button.addEventListener('click',()=>{
+      const input=$('edit-player-photo');input.dataset.forPlayer=button.dataset.uploadPhoto;input.value='';input.click();
+    }));
+    document.querySelectorAll('[data-remove-photo]').forEach(button=>button.addEventListener('click',()=>{
+      const p=player(button.dataset.removePhoto);if(!p)return;
+      if(!confirm('¿Quitar la fotografía de este jugador?'))return;
+      p.foto=null;changedState();renderRoster();showToast('Foto retirada. Falta publicar data.js.');
+    }));
     document.querySelectorAll('[data-captain]').forEach(box=>box.addEventListener('change',()=>{
       const p=player(box.dataset.captain);if(!p)return;
       if(box.checked&&model.jugadores.filter(x=>x.equipo===p.equipo&&x.capitan).length>=2){box.checked=false;showToast('Cada equipo puede tener como máximo dos capitanes.');return;}
@@ -106,15 +148,29 @@
       model.jugadores=model.jugadores.filter(x=>x.id!==id);changedState();renderRoster();
     }));
   }
-  $('add-player-form').addEventListener('submit',ev=>{
-    ev.preventDefault();const name=$('player-name').value.trim(),team=$('player-team').value;
-    if(!name||!model.equipos.some(t=>t.id===team))return;
-    if($('player-captain').checked&&model.jugadores.filter(p=>p.equipo===team&&p.capitan).length>=2){showToast('Ya hay dos capitanes asignados a este equipo.');return;}
-    let id;do{id=`j-${team}-${Math.random().toString(36).slice(2,10)}`;}while(model.jugadores.some(j=>j.id===id));
-    const rawNumber=$('player-number').value;
-    model.jugadores.push({id,nombre:name,equipo:team,posicion:$('player-position').value,dorsal:rawNumber===''?null:Number(rawNumber),foto:null,capitan:$('player-captain').checked});
-    $('player-name').value='';$('player-number').value='';$('player-captain').checked=false;
-    changedState();renderRoster();renderMatchSelect($('admin-match').value);renderMatchForm();showToast('Jugador añadido a la copia de trabajo.');
+  $('edit-player-photo').addEventListener('change',async ev=>{
+    const p=player(ev.target.dataset.forPlayer),file=ev.target.files?.[0];
+    if(!p||!file)return;
+    try{p.foto=await compactPhoto(file);changedState();renderRoster();showToast('Foto actualizada. Descarga data.js para publicar.');}
+    catch(err){showToast('Error con la foto: '+err.message);}
+    finally{ev.target.value='';}
+  });
+  $('add-player-form').addEventListener('submit',async ev=>{
+    ev.preventDefault();const button=ev.currentTarget.querySelector('[type=submit]');
+    const name=$('player-name').value.trim(),t=$('player-team').value;
+    if(!name||!model.equipos.some(x=>x.id===t))return;
+    if($('player-captain').checked&&model.jugadores.filter(p=>p.equipo===t&&p.capitan).length>=2){showToast('Ya hay dos capitanes asignados a este equipo.');return;}
+    if(model.jugadores.some(p=>p.equipo===t&&p.nombre.toLowerCase()===name.toLowerCase())){showToast('Ya existe un jugador con ese nombre en este equipo.');return;}
+    button.disabled=true;button.textContent='Preparando jugador…';
+    try{
+      const file=$('player-photo').files?.[0];const photo=file?await compactPhoto(file):null;
+      let id;do{id=`j-${t}-${Math.random().toString(36).slice(2,10)}`;}while(model.jugadores.some(j=>j.id===id));
+      const rawNumber=$('player-number').value;
+      model.jugadores.push({id,nombre:name,equipo:t,posicion:$('player-position').value,dorsal:rawNumber===''?null:Number(rawNumber),foto:photo,capitan:$('player-captain').checked});
+      $('player-name').value='';$('player-number').value='';$('player-photo').value='';$('player-captain').checked=false;
+      changedState();renderRoster();renderMatchSelect($('admin-match').value);renderMatchForm();showToast('Jugador y foto guardados en el editor. Falta publicar data.js.');
+    }catch(err){showToast('No se pudo añadir: '+err.message);}
+    finally{button.disabled=false;button.textContent='Añadir jugador';}
   });
   function renderTeams(){
     $('admin-team-list').innerHTML=model.equipos.map(t=>`<div class="admin-team-row" data-team-id="${esc(t.id)}"><label class="form-field"><span>Nombre completo</span><input name="team-name" value="${esc(t.nombre)}" maxlength="90"></label><label class="form-field"><span>Nombre corto</span><input name="team-short" value="${esc(t.corto)}" maxlength="30"></label><label class="form-field"><span>Sigla</span><input name="team-code" value="${esc(t.sigla)}" maxlength="4"></label><label class="form-field"><span>Color</span><input name="team-color" type="color" value="${esc(t.color)}"></label></div>`).join('')+'<div class="admin-buttons"><button type="button" class="gold-button" id="save-teams">Guardar equipos en el editor</button></div>';
@@ -150,7 +206,7 @@
   $('import-json').addEventListener('change',async ev=>{
     const file=ev.target.files[0];if(!file)return;
     try{
-      if(file.size>1000000)throw Error('Archivo demasiado grande');
+      if(file.size>25*1024*1024)throw Error('Archivo demasiado grande');
       const obj=JSON.parse(await file.text());
       if(!obj||!Array.isArray(obj.equipos)||!Array.isArray(obj.jugadores)||!Array.isArray(obj.partidos)||obj.equipos.length!==4||!obj.partidos.some(m=>m.id==='L1A')||!obj.partidos.some(m=>m.id==='P-FI'))throw Error('Formato de datos incompatible');
       if(!confirm('Esto sustituirá el trabajo que tengas en este navegador. ¿Continuar?'))return;
