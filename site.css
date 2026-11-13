@@ -84,3 +84,9 @@
     background-size: cover, 100% auto;
   }
 }
+
+
+@media (min-width: 701px) {
+  .home-hero { background-size: cover, auto 88%; background-position: center, right bottom; }
+  .home-hero .hero-content h1 { transform: translateX(-24px); }
+}
