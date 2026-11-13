@@ -24,8 +24,8 @@
   const awards = [
     { key:'zamora', name:'ZAMORA', subtitle:'El muro que menos concede', color:'gold', rankTitle:'Zamora', rankDesc:'Menor media de goles encajados', column:'GC/PJ', footer:'Se exige un mínimo de partidos como portero.' },
     { key:'pichichi', name:'PICHICHI', subtitle:'El instinto delante de portería', color:'cyan', rankTitle:'Pichichi', rankDesc:'Máximos goleadores', column:'GOLES', footer:'Desempate: asistencias y menos partidos jugados.' },
-    { key:'asistencias', name:'PLAYMAKER', subtitle:'Los pases que fabrican goles', color:'purple', rankTitle:'Máximos asistentes', rankDesc:'Quienes encuentran el último pase', column:'ASIST.', footer:'Desempate: goles y menos partidos jugados.' },
-    { key:'sucio', name:'CARNICERO', subtitle:'La tarjeta también tiene dueño', color:'red', rankTitle:'Jugador sucio', rankDesc:'La clasificación menos honorable', column:'PUNTOS', footer:'Amarilla = 1 punto · Roja directa = 3 puntos.' }
+    { key:'asistencias', name:'PLAYMAKER', subtitle:'Los pases que fabrican goles. Jugador con más asistencias', color:'purple', rankTitle:'Máximos asistentes', rankDesc:'Quienes encuentran el último pase', column:'ASIST.', footer:'Desempate: goles y menos partidos jugados.' },
+    { key:'sucio', name:'CARNICERO', subtitle:'O el jugador o la pelota. Jugador más amonestado.', color:'red', rankTitle:'Jugador sucio', rankDesc:'La clasificación menos honorable', column:'PUNTOS', footer:'Amarilla = 1 punto · Roja directa = 3 puntos.' }
   ];
 
   function demoData() {
