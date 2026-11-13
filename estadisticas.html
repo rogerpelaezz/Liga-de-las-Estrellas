@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1524">
+  <meta name="description" content="Estadísticas oficiales de la I Liga de las Estrellas: Trofeo Zamora, Pichichi, máximo asistente y Jugador Sucio.">
+  <title>Estadísticas | I Liga de las Estrellas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
+  <script src="data.js" defer></script>
+  <script src="core.js" defer></script>
+<script src="app.js" defer></script>
+<script src="site.js" defer></script>
+</head>
+<body data-page="estadisticas">
+  <div class="announcement"><span class="pulse"></span> TEMPORADA 2026/27 <span class="announcement-line"></span> I EDICIÓN DEL CAMPEONATO</div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="I Liga de las Estrellas, inicio">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 23.9 14.2 35.8 14.5 26.3 21.7 29.8 33.4 20 26.4 10.2 33.4 13.7 21.7 4.2 14.5 16.1 14.2Z" fill="currentColor"/></svg></span>
+        <span class="brand-name">LIGA <em>DE LAS</em> ESTRELLAS<small>FÚTBOL 7 · PRIMERA EDICIÓN</small></span>
+      </a>
+      <nav class="nav nav-full" aria-label="Navegación principal"><a href="index.html">Inicio</a><a href="liga.html">Clasificación</a><a href="calendario.html">Calendario</a><a href="playoffs.html">Playoffs</a><a href="equipos.html">Equipos</a><a href="estadisticas.html" class="active" aria-current="page">Estadísticas</a><a href="reglamento.html">Reglamento</a></nav>
+      <button class="mobile-menu-btn" id="menu-toggle" aria-label="Abrir menú" aria-expanded="false" type="button">☰</button>
+    </div><nav class="mobile-menu" id="mobile-menu" aria-label="Navegación móvil"><a href="index.html">Inicio</a><a href="liga.html">Clasificación</a><a href="calendario.html">Calendario</a><a href="playoffs.html">Playoffs</a><a href="equipos.html">Equipos</a><a href="estadisticas.html">Estadísticas</a><a href="reglamento.html">Reglamento</a></nav>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+      <div class="container hero-inner">
+        <div class="eyebrow"><span class="eyebrow-stroke"></span> EL OTRO PARTIDO SE JUEGA EN LOS NÚMEROS</div>
+        <div class="hero-grid">
+          <div>
+            <div class="hero-kicker">CENTRO DE ESTADÍSTICAS <span>·</span> EDICIÓN I</div>
+            <h1>LOS NÚMEROS<br><span>TAMBIÉN</span> JUEGAN.</h1>
+            <p class="hero-copy">Goles que valen oro. Pases que cambian partidos. Paradas imposibles. Y alguna tarjeta de más. Aquí se escribe la historia de la liga.</p>
+          </div>
+          <div class="hero-emblem" aria-hidden="true">
+            <div class="emblem-outer"><div class="emblem-inner"><span class="emblem-star">★</span><span class="emblem-num">01</span><span class="emblem-label">SEASON</span></div></div>
+            <div class="emblem-sub">THE STARS LEAGUE</div>
+          </div>
+        </div>
+        <div class="hero-bottom">
+          <div class="hero-team-label">LOS CUATRO CONTENDIENTES</div>
+          <div class="team-rail" id="teams-strip"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="filters-wrap">
+      <div class="container filters-inner">
+        <div class="filter-heading"><span class="small-cross">✳</span><span>DATOS DE COMPETICIÓN</span><span id="data-status" class="status-tag">OFICIALES</span></div>
+        <div class="filter-actions">
+          <div class="segmented" role="group" aria-label="Filtrar estadísticas por fase">
+            <button type="button" class="segment selected" data-phase="total" aria-pressed="true">Torneo completo</button>
+            <button type="button" class="segment" data-phase="liga" aria-pressed="false">Liga regular</button>
+            <button type="button" class="segment" data-phase="playoff" aria-pressed="false">Playoffs</button>
+          </div>
+          <button type="button" id="demo-toggle" class="demo-toggle" aria-pressed="false"><span class="demo-dot"></span> Ver demo</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="overview container" aria-label="Resumen del torneo">
+      <div class="summary-card"><span class="summary-icon">⚽</span><span class="summary-count" id="stat-goals">0</span><div class="summary-bottom"><strong>GOLES</strong><span>Marcados en el torneo</span></div></div>
+      <div class="summary-card"><span class="summary-icon">↗</span><span class="summary-count" id="stat-assists">0</span><div class="summary-bottom"><strong>ASISTENCIAS</strong><span>Registradas</span></div></div>
+      <div class="summary-card"><span class="summary-icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M7 5h18v22H7z" fill="#e6c965" stroke="#e6c965" stroke-width="1.5"/></svg></span><span class="summary-count" id="stat-yellows">0</span><div class="summary-bottom"><strong>AMARILLAS</strong><span>Tarjetas mostradas</span></div></div>
+      <div class="summary-card"><span class="summary-icon"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M7 5h18v22H7z" fill="#e76a6b" stroke="#e76a6b" stroke-width="1.5"/></svg></span><span class="summary-count" id="stat-matches">0<span class="count-total">/16</span></span><div class="summary-bottom"><strong>PARTIDOS</strong><span>Disputados / programados</span></div></div>
+    </section>
+
+    <section class="awards-section container" id="premios">
+      <div class="section-heading"><div><span class="section-index">01 / EL PODIO</span><h2>LOS CUATRO <em>GALARDONES.</em></h2><p>Cuatro maneras de dejar huella en la temporada.</p></div><span class="heading-aside">PREMIOS INDIVIDUALES <span>✦</span> 2026/27</span></div>
+      <div class="awards-grid" id="award-cards" aria-live="polite"></div>
+      <div class="awards-note"><span>◎</span> Los ganadores aparecerán automáticamente cuando haya suficientes datos oficiales. El modo demo muestra ejemplos ficticios y no modifica los resultados reales.</div>
+    </section>
+
+    <section class="rankings-section" id="rankings">
+      <div class="container">
+        <div class="section-heading"><div><span class="section-index">02 / TABLAS COMPLETAS</span><h2>LA LUCHA <em>POR CADA PREMIO.</em></h2><p>Clasificaciones actualizadas a partir de las actas de partido.</p></div><button type="button" class="export-button" id="export-csv"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Exportar CSV</button></div>
+        <div class="rankings-grid" id="ranking-tables" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="method-section container" id="reglamento">
+      <div class="section-heading"><div><span class="section-index">03 / LETRA PEQUEÑA</span><h2>REGLAS <em>DEL JUEGO.</em></h2><p>Criterios provisionales para repartir los premios con transparencia.</p></div></div>
+      <div class="rules-grid">
+        <article class="rule-item"><span class="rule-number">01</span><div><h3>TROFEO ZAMORA</h3><p>Portero con menor media de goles encajados por partido. Se exige un mínimo provisional de <strong>3 partidos jugados como portero</strong>. En caso de empate, prevalece quien haya disputado más partidos y, después, quien haya encajado menos goles.</p></div></article>
+        <article class="rule-item"><span class="rule-number">02</span><div><h3>TROFEO PICHICHI</h3><p>Futbolista con más goles. Si empatan, se ordena por asistencias y luego por menos partidos disputados. Los goles en propia puerta no cuentan a favor del jugador.</p></div></article>
+        <article class="rule-item"><span class="rule-number">03</span><div><h3>REY DE LAS ASISTENCIAS</h3><p>Futbolista con más asistencias de gol registradas. Para desempatar: mayor número de goles y, después, menos partidos disputados.</p></div></article>
+        <article class="rule-item"><span class="rule-number">04</span><div><h3>PREMIO AL JUGADOR SUCIO</h3><p>Premio desenfadado al futbolista con mayor puntuación disciplinaria: <strong>1 punto por amarilla y 3 por roja directa</strong>. Una expulsión por doble amarilla suma 2 puntos. En caso de empate, prevalecen las rojas directas y luego las amarillas.</p></div></article>
+      </div>
+      <div class="method-footer"><span class="method-icon">i</span><span>Estas reglas son una propuesta editable antes del inicio del torneo. Los premios se calculan sobre la fase seleccionada; para la entrega oficial se recomienda usar «Torneo completo».</span></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container footer-content"><div><span class="footer-star">✦</span> I LIGA DE LAS ESTRELLAS <span class="footer-separator">/</span> TEMPORADA 2026/27</div><span><a href="admin.html">Zona de gestión</a> · 4 EQUIPOS · 1 CAMPEÓN</span></div></footer>
+  <div class="toast" role="status" aria-live="polite" id="toast"></div>
+</body>
+</html>
