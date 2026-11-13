@@ -167,3 +167,22 @@ body[data-page="estadisticas"] .award-card:nth-child(3) {
     background-position: center, 42% bottom;
   }
 }
+
+
+/* Encuadre final de las fotografías de premios */
+body[data-page="estadisticas"] .award-card:nth-child(2) {
+  background-position: center, calc(100% + 25px) 24px;
+}
+body[data-page="estadisticas"] .award-card:nth-child(3) {
+  background-size: cover, auto 95%;
+  background-position: center, 42% 14px;
+}
+@media (max-width: 700px) {
+  body[data-page="estadisticas"] .award-card:nth-child(2) {
+    background-position: center, calc(100% + 20px) 20px;
+  }
+  body[data-page="estadisticas"] .award-card:nth-child(3) {
+    background-size: cover, auto 94%;
+    background-position: center, 42% 14px;
+  }
+}
