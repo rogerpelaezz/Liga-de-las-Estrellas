@@ -23,9 +23,7 @@
 
   const awards = [
     { key:'zamora', name:'ZAMORA', subtitle:'El muro que menos concede', color:'gold', rankTitle:'Zamora', rankDesc:'Menor media de goles encajados', column:'GC/PJ', footer:'Se exige un mínimo de partidos como portero.' },
-    { key:'pichichi', name:'PICHICHI', subtitle:'El instinto delante de portería', color:'cyan', rankTitle:'Pichichi', rankDesc:'Máximos goleadores', column:'GOLES', footer:'Desempate: asistencias y menos partidos jugados.' },
-    { key:'asistencias', name:'PLAYMAKER', subtitle:'Los pases que fabrican goles. Jugador con más asistencias', color:'purple', rankTitle:'Máximos asistentes', rankDesc:'Quienes encuentran el último pase', column:'ASIST.', footer:'Desempate: goles y menos partidos jugados.' },
-    { key:'sucio', name:'CARNICERO', subtitle:'O el jugador o la pelota. Jugador más amonestado.', color:'red', rankTitle:'Jugador sucio', rankDesc:'La clasificación menos honorable', column:'PUNTOS', footer:'Amarilla = 1 punto · Roja directa = 3 puntos.' }
+    { key:'pichichi', name:'PICHICHI', subtitle:'El instinto delante de portería', color:'cyan', rankTitle:'Pichichi', rankDesc:'Máximos goleadores', column:'GOLES', footer:'Desempate: asistencias y menos partidos jugados.' }
   ];
 
   function demoData() {
@@ -146,7 +144,7 @@
       const team=winner?findTeam(data,winner.equipo):null;
       const [value,label]=formatStat(award.key,winner);
       return `<article class="award-card ${award.color}"><div class="award-top"><span class="award-number">PREMIO 0${index+1}</span><div class="award-symbol">${ICONS[award.key]}</div></div><h3 class="award-name">${award.name}</h3><p class="award-subtitle">${award.subtitle}</p><div class="award-divider"></div><div class="award-winner-overline">${winner?'LÍDER ACTUAL':'SIN GANADOR ASIGNADO'}</div><div class="award-winner ${winner?'':'muted'}">${winner?escapeHTML(winner.nombre):'Pendiente de datos'}</div><div class="award-stat">${value}<span>${label}</span></div><div class="award-bottom"><strong>${team?escapeHTML(team.corto):'TEMPORADA 2026/27'}</strong><span class="mini-line"></span></div></article>`;
-    }).join('');
+    }).join('') + '<article class="award-card golden-ball"><div class="award-top"><span class="award-number">PREMIO 03</span><div class="award-symbol" aria-hidden="true">★</div></div><h3 class="award-name">BALÓN DE ORO DEL TORNEO</h3><p class="award-subtitle">El futbolista más destacado del torneo.</p><div class="award-divider"></div><div class="award-winner-overline">PENDIENTE DE DESIGNACIÓN</div><div class="award-winner muted">Por decidir</div><div class="award-stat">★<span>RECONOCIMIENTO INDIVIDUAL</span></div><div class="award-bottom"><strong>TEMPORADA 2026/27</strong><span class="mini-line"></span></div></article>';
   }
   function renderRankings(data, stats) {
     $('#ranking-tables').innerHTML=awards.map(award=>{
