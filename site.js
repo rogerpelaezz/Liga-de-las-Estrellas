@@ -4,7 +4,8 @@
  if(!C||!source){document.body.insertAdjacentHTML('afterbegin','<p>Faltan archivos de datos.</p>');return;}
  const data=C.enrich(source), st=data._table,$=id=>document.getElementById(id);
  const e=C.esc,score=C.score,teamName=(id,short=true)=>C.teamName(data,id,short),t=id=>C.team(data,id);
- const logo=(id,big=false)=>`<span class="team-emblem real ${big?'big':''}" style="--team:${C.esc(t(id)?.color||'#8d98aa')}" aria-hidden="true">${['bayern','crystal','aston','cultural'].includes(id)?`<img alt="" src="assets/${id}.webp" loading="lazy">`:e(t(id)?.sigla||'??')}</span>`;
+ const logoFiles={bayern:"bayern-escudo.png",crystal:"crystal-escudo.png",aston:"aston-escudo.png",cultural:"cultural-escudo.png"};
+ const logo=(id,big=false)=>`<span class="team-emblem real ${big?'big':''}" style="--team:${C.esc(t(id)?.color||'#8d98aa')}" aria-hidden="true">${['bayern','crystal','aston','cultural'].includes(id)?`<img alt="" src="assets/${logoFiles[id]}" loading="lazy">`:e(t(id)?.sigla||'??')}</span>`;
  const initials=name=>String(name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
  const safePhoto=src=>typeof src==='string' && (/^data:image\/(?:webp|jpeg|png);base64,[a-z0-9+/=]+$/i.test(src)||/^assets\/jugadores\/[a-z0-9_.-]+\.(?:webp|png|jpg|jpeg)$/i.test(src))?src:null;
  const metrics=(list)=>list.map(x=>`<div class="metric"><b>${e(x[0])}</b><span>${e(x[1])}</span></div>`).join('');
