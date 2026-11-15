@@ -272,3 +272,42 @@ body[data-page="reglamento"] .page-hero {
     background-position: center, center bottom;
   }
 }
+
+/* Estadísticas: tres premios individuales y dos títulos de equipo */
+body[data-page="estadisticas"] .awards-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+body[data-page="estadisticas"] .awards-grid .award-card.golden-ball {
+  --award: #f1d27f;
+  background-color: #202b3d;
+  background-image: linear-gradient(90deg, rgba(11,20,36,.92), rgba(11,20,36,.65) 55%, rgba(11,20,36,.18)), url("assets/balon-oro-torneo.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center, center 28%;
+}
+body[data-page="estadisticas"] .team-awards { padding-top: 0; }
+body[data-page="estadisticas"] .team-awards-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px; }
+body[data-page="estadisticas"] .team-awards-grid .award-card { min-height: 350px; --award: #f1d27f; }
+body[data-page="estadisticas"] .team-awards-grid .award-name { max-width: 330px; }
+body[data-page="estadisticas"] .team-awards-grid .award-symbol { font-size: 27px; }
+body[data-page="estadisticas"] .team-awards-grid .regular-champion {
+  background-color: #172b3a;
+  background-image: linear-gradient(90deg, rgba(11,20,36,.92), rgba(11,20,36,.64) 55%, rgba(11,20,36,.28)), url("assets/campeon-liga-regular.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center, center 42%;
+}
+body[data-page="estadisticas"] .team-awards-grid .tournament-champion {
+  background-color: #3d202a;
+  background-image: linear-gradient(90deg, rgba(28,15,27,.92), rgba(28,15,27,.62) 55%, rgba(28,15,27,.22)), url("assets/campeon-torneo.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center, center 42%;
+}
+@media (max-width: 800px) {
+  body[data-page="estadisticas"] .awards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  body[data-page="estadisticas"] .awards-grid,
+  body[data-page="estadisticas"] .team-awards-grid { grid-template-columns: 1fr; }
+  body[data-page="estadisticas"] .awards-grid .award-card.golden-ball { background-position: center, center 25%; }
+  body[data-page="estadisticas"] .team-awards-grid .award-card { min-height: 310px; }
+}
