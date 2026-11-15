@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0d1524">
-  <meta name="description" content="Estadísticas oficiales de la I Liga de las Estrellas: Trofeo Zamora, Pichichi, Playmaker y Carnicero.">
+  <meta name="description" content="Estadísticas oficiales de la I Liga de las Estrellas: Zamora, Pichichi, Balón de Oro, campeón de liga regular y campeón del torneo.">
   <title>Estadísticas | I Liga de las Estrellas</title>
 <link rel="icon" type="image/png" href="assets/favicon.png?v=1">
 <link rel="apple-touch-icon" href="assets/favicon.png">
@@ -12,10 +12,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="site.css?v=carnicero-1">
+<link rel="stylesheet" href="site.css?v=premios-2">
   <script src="data.js" defer></script>
   <script src="core.js" defer></script>
-<script src="app.js?v=descripciones-1" defer></script>
+<script src="app.js?v=premios-2" defer></script>
 <script src="site.js" defer></script>
 <style>
 body[data-page="estadisticas"] .hero{background-color:#0b1424;background-image:linear-gradient(90deg,rgba(11,20,36,.97) 0%,rgba(11,20,36,.88) 35%,rgba(11,20,36,.55) 64%,rgba(11,20,36,.35) 100%),url("assets/estadisticas-hero.png");background-position:center,center;background-size:cover,cover;background-repeat:no-repeat}
@@ -83,27 +83,34 @@ body[data-page="estadisticas"] .hero-grid{grid-template-columns:minmax(0,650px);
     </section>
 
     <section class="awards-section container" id="premios">
-      <div class="section-heading"><div><span class="section-index">01 / EL PODIO</span><h2>LOS CUATRO <em>GALARDONES.</em></h2><p>Cuatro maneras de dejar huella en la temporada.</p></div><span class="heading-aside">PREMIOS INDIVIDUALES <span>✦</span> 2026/27</span></div>
+      <div class="section-heading"><div><span class="section-index">01 / EL PODIO</span><h2>LOS TRES <em>GALARDONES.</em></h2><p>Tres premios individuales para dejar huella en la temporada.</p></div><span class="heading-aside">PREMIOS INDIVIDUALES <span>✦</span> 2026/27</span></div>
       <div class="awards-grid" id="award-cards" aria-live="polite"></div>
-      <div class="awards-note"><span>◎</span> Los ganadores aparecerán automáticamente cuando haya suficientes datos oficiales. El modo demo muestra ejemplos ficticios y no modifica los resultados reales.</div>
+      <div class="awards-note"><span>◎</span> Zamora y Pichichi se calculan con las actas oficiales. El Balón de Oro se anunciará cuando se designe. El modo demo muestra ejemplos ficticios y no modifica los resultados reales.</div>
+    </section>
+
+    <section class="awards-section team-awards container" aria-label="Títulos de equipo">
+      <div class="section-heading"><div><span class="section-index">02 / LOS TÍTULOS</span><h2>LOS EQUIPOS <em>CAMPEONES.</em></h2><p>Dos caminos para hacer historia.</p></div><span class="heading-aside">PREMIOS COLECTIVOS <span>✦</span> 2026/27</span></div>
+      <div class="team-awards-grid">
+        <article class="award-card regular-champion"><div class="award-top"><span class="award-number">TÍTULO 01</span><div class="award-symbol" aria-hidden="true">♛</div></div><h3 class="award-name">CAMPEÓN DE LA LIGA REGULAR</h3><p class="award-subtitle">El equipo que termine primero tras la liga regular.</p><div class="award-divider"></div><div class="award-winner-overline">PENDIENTE DE RESULTADOS</div><div class="award-winner muted">Por decidir</div><div class="award-bottom"><strong>TEMPORADA 2026/27</strong><span class="mini-line"></span></div></article>
+        <article class="award-card tournament-champion"><div class="award-top"><span class="award-number">TÍTULO 02</span><div class="award-symbol" aria-hidden="true">✦</div></div><h3 class="award-name">CAMPEÓN DEL TORNEO</h3><p class="award-subtitle">El equipo que conquiste la final.</p><div class="award-divider"></div><div class="award-winner-overline">PENDIENTE DE LA FINAL</div><div class="award-winner muted">Por decidir</div><div class="award-bottom"><strong>TEMPORADA 2026/27</strong><span class="mini-line"></span></div></article>
+      </div>
     </section>
 
     <section class="rankings-section" id="rankings">
       <div class="container">
-        <div class="section-heading"><div><span class="section-index">02 / TABLAS COMPLETAS</span><h2>LA LUCHA <em>POR CADA PREMIO.</em></h2><p>Clasificaciones actualizadas a partir de las actas de partido.</p></div><button type="button" class="export-button" id="export-csv"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Exportar CSV</button></div>
+        <div class="section-heading"><div><span class="section-index">03 / TABLAS COMPLETAS</span><h2>LA LUCHA <em>POR CADA PREMIO.</em></h2><p>Clasificaciones de Zamora y Pichichi actualizadas a partir de las actas.</p></div><button type="button" class="export-button" id="export-csv"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 17v3h14v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Exportar CSV</button></div>
         <div class="rankings-grid" id="ranking-tables" aria-live="polite"></div>
       </div>
     </section>
 
     <section class="method-section container" id="reglamento">
-      <div class="section-heading"><div><span class="section-index">03 / LETRA PEQUEÑA</span><h2>REGLAS <em>DEL JUEGO.</em></h2><p>Criterios provisionales para repartir los premios con transparencia.</p></div></div>
+      <div class="section-heading"><div><span class="section-index">04 / LETRA PEQUEÑA</span><h2>REGLAS <em>DEL JUEGO.</em></h2><p>Criterios provisionales para repartir los premios con transparencia.</p></div></div>
       <div class="rules-grid">
         <article class="rule-item"><span class="rule-number">01</span><div><h3>TROFEO ZAMORA</h3><p>Portero con menor media de goles encajados por partido. Se exige un mínimo provisional de <strong>3 partidos jugados como portero</strong>. En caso de empate, prevalece quien haya disputado más partidos y, después, quien haya encajado menos goles.</p></div></article>
         <article class="rule-item"><span class="rule-number">02</span><div><h3>TROFEO PICHICHI</h3><p>Futbolista con más goles. Si empatan, se ordena por asistencias y luego por menos partidos disputados. Los goles en propia puerta no cuentan a favor del jugador.</p></div></article>
-        <article class="rule-item"><span class="rule-number">03</span><div><h3>PLAYMAKER</h3><p>Los pases que fabrican goles. Jugador con más asistencias. Para desempatar: mayor número de goles y, después, menos partidos disputados.</p></div></article>
-        <article class="rule-item"><span class="rule-number">04</span><div><h3>TROFEO CARNICERO</h3><p>O el jugador o la pelota. Jugador más amonestado. La puntuación disciplinaria es de <strong>1 punto por amarilla y 3 por roja directa</strong>. Una expulsión por doble amarilla suma 2 puntos. En caso de empate, prevalecen las rojas directas y luego las amarillas.</p></div></article>
+        <article class="rule-item"><span class="rule-number">03</span><div><h3>BALÓN DE ORO DEL TORNEO</h3><p>Reconocimiento al futbolista más destacado del torneo. La elección se comunicará cuando se acuerde el criterio y se designe al ganador.</p></div></article>
       </div>
-      <div class="method-footer"><span class="method-icon">i</span><span>Estas reglas son una propuesta editable antes del inicio del torneo. Los premios se calculan sobre la fase seleccionada; para la entrega oficial se recomienda usar «Torneo completo».</span></div>
+      <div class="method-footer"><span class="method-icon">i</span><span>Estas reglas son una propuesta editable antes del inicio del torneo. Zamora y Pichichi se calculan sobre la fase seleccionada; para la entrega oficial se recomienda usar «Torneo completo».</span></div>
     </section>
   </main>
 
