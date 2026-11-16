@@ -13,7 +13,7 @@
   const initials=name=>String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase();
   const photoUrl=src=>typeof src==='string'&&(/^data:image\/(?:webp|jpeg|png);base64,[a-z0-9+/=]+$/i.test(src)||/^assets\/jugadores\/[a-z0-9_.-]+\.(?:webp|png|jpe?g)$/i.test(src))?src:null;
   const team=id=>C.team(data,id)||{nombre:'Equipo por determinar',corto:'Equipo',color:'#607187',id:'unknown'};
-  const badge=t=>`<span class="player-team-badge" style="--club:${esc(t.color)}"><img src="assets/${['bayern','crystal','aston','cultural'].includes(t.id)?t.id:'aston'}.webp" alt="" loading="lazy"><span>${esc(t.corto)}</span></span>`;
+  const badge=t=>`<span class="player-team-badge" style="--club:${esc(t.color)}"><img src="assets/${['bayern','crystal','aston','cultural'].includes(t.id)?t.id:'aston'}-escudo.png" alt="" loading="lazy"><span>${esc(t.corto)}</span></span>`;
   const portrait=(p,kind='tile')=>{
     const url=photoUrl(p.foto);
     return `<span class="player-portrait ${kind}">${url?`<img src="${esc(url)}" alt="Fotografía de ${esc(p.nombre)}" loading="lazy">`:`<span aria-hidden="true">${esc(initials(p.nombre))}</span>`}</span>`;
@@ -42,7 +42,7 @@
   }
   function matchRow(m,playerTeam){
     const ownHome=m.local===playerTeam,opponent=team(ownHome?m.visitante:m.local);
-    const rivalLogo=['bayern','crystal','aston','cultural'].includes(opponent.id)?`<img src="assets/${opponent.id}.webp" alt="" loading="lazy">`:'';
+    const rivalLogo=['bayern','crystal','aston','cultural'].includes(opponent.id)?`<img src="assets/${opponent.id}-escudo.png" alt="" loading="lazy">`:'';
     const date=m.fecha?C.formatDate(m.fecha):'Fecha por confirmar';
     const time=m.hora||'Hora pendiente';
     let result='POR JUGAR';let label='Pendiente';
