@@ -10,6 +10,15 @@
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="site.css?v=logo-izquierda-4"><link rel="stylesheet" href="perfil.css">
 <script src="data.js?v=capitanes-2" defer></script><script src="core.js" defer></script><script src="site.js" defer></script><script src="perfil.js?v=escudos-2" defer></script>
 <link rel="icon" type="image/png" href="assets/balon-estrellas.png?v=2">
+
+<style>
+.profile-hero{background:#0b192b;isolation:isolate}
+.profile-hero-emblem{display:none}
+.profile-hero::after{content:"";position:absolute;right:0;top:0;bottom:0;width:48%;background:url("assets/quien-soy-balotelli.png") center 26%/cover no-repeat;opacity:.9;pointer-events:none;z-index:0;mask-image:linear-gradient(to right,transparent,black 28%,black 88%,transparent),linear-gradient(to bottom,transparent,black 12%,black 85%,transparent);mask-composite:intersect}
+.profile-hero-layout{min-height:350px}
+.profile-hero-layout>div:first-child{max-width:57%}
+@media(max-width:700px){.profile-hero-layout{padding-bottom:285px;min-height:0}.profile-hero-layout>div:first-child{max-width:100%}.profile-hero::after{top:auto;height:270px;width:100%;background-size:auto 570px;background-position:center 25%;mask-image:linear-gradient(to right,transparent,black 18%,black 82%,transparent),linear-gradient(to bottom,transparent,black 15%,black 85%,transparent)}}
+</style>
 </head><body data-page="quien-soy">
 <div class="announcement"><span class="pulse"></span> TEMPORADA 2026/27 <span class="announcement-line"></span> I EDICIÓN DEL CAMPEONATO</div>
 <header class="site-header"><div class="container header-inner">
