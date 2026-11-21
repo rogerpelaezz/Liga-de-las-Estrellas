@@ -102,10 +102,17 @@ window.LIGA_DATA = {
     { id:'L5B', fase:'liga', jornada:5, fecha:null, hora:'20:00', local:'aston', visitante:'crystal' },
     { id:'L6A', fase:'liga', jornada:6, fecha:null, hora:'20:00', local:'cultural', visitante:'aston' },
     { id:'L6B', fase:'liga', jornada:6, fecha:null, hora:'21:00', local:'crystal', visitante:'bayern' },
-    // El cuadro se completará automáticamente al cerrar las 12 actas de liga.
-    { id:'P-SF1', fase:'playoff', jornada:7, fecha:null, hora:'20:00', local:null, visitante:null },
-    { id:'P-SF2', fase:'playoff', jornada:7, fecha:null, hora:'21:00', local:null, visitante:null },
-    { id:'P-BR', fase:'playoff', jornada:8, fecha:null, hora:'20:00', local:null, visitante:null },
-    { id:'P-FI', fase:'playoff', jornada:8, fecha:null, hora:'21:00', local:null, visitante:null }
+    // Tercera vuelta: se repiten los cruces de la primera vuelta; fechas por confirmar.
+    { id:'L7A', fase:'liga', jornada:7, fecha:null, hora:'20:00', local:'bayern', visitante:'crystal' },
+    { id:'L7B', fase:'liga', jornada:7, fecha:null, hora:'21:00', local:'aston', visitante:'cultural' },
+    { id:'L8A', fase:'liga', jornada:8, fecha:null, hora:'20:00', local:'cultural', visitante:'bayern' },
+    { id:'L8B', fase:'liga', jornada:8, fecha:null, hora:'21:00', local:'crystal', visitante:'aston' },
+    { id:'L9A', fase:'liga', jornada:9, fecha:null, hora:'20:00', local:'bayern', visitante:'aston' },
+    { id:'L9B', fase:'liga', jornada:9, fecha:null, hora:'21:00', local:'cultural', visitante:'crystal' },
+    // La Copa de la Liga se juega después de las nueve jornadas.
+    { id:'P-SF1', fase:'playoff', jornada:10, fecha:null, hora:'20:00', local:null, visitante:null },
+    { id:'P-SF2', fase:'playoff', jornada:10, fecha:null, hora:'21:00', local:null, visitante:null },
+    { id:'P-BR', fase:'playoff', jornada:11, fecha:null, hora:'20:00', local:null, visitante:null },
+    { id:'P-FI', fase:'playoff', jornada:11, fecha:null, hora:'21:00', local:null, visitante:null }
   ].map(p => ({ ...p, golesLocal:null, golesVisitante:null, ganadorDesempate:null, participantes:[], porteros:{local:null,visitante:null}, eventos:[] }))
 };
