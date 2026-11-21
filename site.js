@@ -32,7 +32,7 @@
  }
  function playoffBracket(){
   const po=id=>data.partidos.find(m=>m.id===id);
-  return `<div class="bracket-col"><div class="bracket-label">SEMIFINALES</div>${playoffMatch(po('P-SF1'),['1.º clasificado','4.º clasificado'])}${playoffMatch(po('P-SF2'),['2.º clasificado','3.º clasificado'])}</div><div class="bracket-col"><div class="bracket-label">POR EL PODIO</div>${playoffMatch(po('P-FI'),['Ganador semifinal 1','Ganador semifinal 2'])}${playoffMatch(po('P-BR'),['Perdedor semifinal 1','Perdedor semifinal 2'])}</div>`;
+  return `<div class="bracket-col bracket-semis"><div class="bracket-label">SEMIFINALES</div>${playoffMatch(po('P-SF1'),['1.º clasificado','4.º clasificado'])}${playoffMatch(po('P-SF2'),['2.º clasificado','3.º clasificado'])}</div><div class="bracket-col bracket-final"><div class="bracket-label">GRAN FINAL</div>${playoffMatch(po('P-FI'),['Ganador semifinal 1','Ganador semifinal 2'])}</div><div class="bracket-col bracket-bronze"><div class="bracket-label">TERCER Y CUARTO PUESTO</div>${playoffMatch(po('P-BR'),['Perdedor semifinal 1','Perdedor semifinal 2'])}</div>`;
  }
  function fixtures(filter='all'){
   const matches=data.partidos.filter(m=>m.fase==='liga');
