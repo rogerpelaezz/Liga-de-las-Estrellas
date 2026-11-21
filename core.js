@@ -4,7 +4,7 @@
   const names={'P-SF1':'Semifinal 1','P-SF2':'Semifinal 2','P-BR':'Tercer puesto','P-FI':'Final'};
   const score=m=>Number.isInteger(m.golesLocal)&&Number.isInteger(m.golesVisitante)&&m.golesLocal>=0&&m.golesVisitante>=0;
   const esc=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const makePlayoff=(id)=>({id,fase:'playoff',jornada:id.startsWith('P-SF')?7:8,fecha:null,hora:null,local:null,visitante:null,golesLocal:null,golesVisitante:null,ganadorDesempate:null,participantes:[],porteros:{local:null,visitante:null},eventos:[]});
+  const makePlayoff=(id)=>({id,fase:'playoff',jornada:id.startsWith('P-SF')?10:11,fecha:null,hora:null,local:null,visitante:null,golesLocal:null,golesVisitante:null,ganadorDesempate:null,participantes:[],porteros:{local:null,visitante:null},eventos:[]});
   function standings(data){
     const rows=data.equipos.map(t=>({...t,pj:0,pg:0,pe:0,pp:0,gf:0,gc:0,dg:0,pts:0,ultimos:[]}));
     const byId=Object.fromEntries(rows.map(r=>[r.id,r]));
