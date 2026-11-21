@@ -24,7 +24,7 @@
   return `<article class="team-card" style="--team:${e(r.color)}"><div class="team-color"></div>${logo(r.id,true)}<h2 class="team-name">${e(r.nombre)}</h2><span class="team-subtitle">${e(r.sigla)} · ${e(({'bayern':'Roja','crystal':'Blanca','aston':'Verde','cultural':'Negra'})[r.id]||'')}</span>${full?`<div class="captain-list"><strong>CAPITANES</strong>${[0,1].map(i=>`<span>${i+1}. ${caps[i]?e(caps[i].nombre):'Por designar'}</span>`).join('')}</div><div class="roster"><h3>PLANTILLA · ${roster.length} JUGADORES</h3>${roster.length?`<div class="team-roster-grid">${roster.map(j=>`<a class="team-player-link" href="quien-soy.html?jugador=${encodeURIComponent(j.id)}"><span class="team-player-photo">${safePhoto(j.foto)?`<img src="${e(safePhoto(j.foto))}" loading="lazy" alt="Foto de ${e(j.nombre)}">`:e(initials(j.nombre))}</span><span><strong>${e(j.nombre)}</strong><small>${j.dorsal!==null&&j.dorsal!==undefined?'Nº '+e(j.dorsal)+' · ':''}${e(j.posicion||'')}${j.capitan?' · Capitán':''}</small></span></a>`).join('')}</div>`:'<p class="empty-note">Pendiente de completar.</p>'}</div>`:`<span class="team-foot">${roster.length} jugadores inscritos · ${caps.length}/2 capitanes</span>`}</article>`;
  }
  function playoffMatch(m,placeholders){
-  const lead=m.id==='P-FI'?'GRAN FINAL':m.id==='P-BR'?'TERCER PUESTO':C.playoffNames[m.id].toUpperCase();
+  const lead=m.id==='P-FI'?'GRAN FINAL':m.id==='P-BR'?'TERCER PUESTO':C.playoffNames[m.id].toUpperCase()+' · SORTEO';
   const win=C.winner(m);
   const labels=placeholders||['Por determinar','Por determinar'];
   const a=m.local?teamName(m.local):labels[0],b=m.visitante?teamName(m.visitante):labels[1];
@@ -32,7 +32,7 @@
  }
  function playoffBracket(){
   const po=id=>data.partidos.find(m=>m.id===id);
-  return `<div class="bracket-col bracket-semis"><div class="bracket-label"><span>01</span> SEMIFINALES</div>${playoffMatch(po('P-SF1'),['1.º clasificado','4.º clasificado'])}${playoffMatch(po('P-SF2'),['2.º clasificado','3.º clasificado'])}</div><div class="bracket-col bracket-final"><div class="bracket-label"><span>02</span> GRAN FINAL</div>${playoffMatch(po('P-FI'),['Ganador semifinal 1','Ganador semifinal 2'])}</div><div class="bracket-col bracket-bronze"><div class="bracket-label"><span>03</span> TERCER Y CUARTO PUESTO</div>${playoffMatch(po('P-BR'),['Perdedor semifinal 1','Perdedor semifinal 2'])}</div>`;
+  return `<div class="bracket-col bracket-semis"><div class="bracket-label"><span>01</span> SEMIFINALES</div>${playoffMatch(po('P-SF1'),['Pendiente de sorteo','Pendiente de sorteo'])}${playoffMatch(po('P-SF2'),['Pendiente de sorteo','Pendiente de sorteo'])}</div><div class="bracket-col bracket-final"><div class="bracket-label"><span>02</span> GRAN FINAL</div>${playoffMatch(po('P-FI'),['Ganador semifinal 1','Ganador semifinal 2'])}</div><div class="bracket-col bracket-bronze"><div class="bracket-label"><span>03</span> TERCER Y CUARTO PUESTO</div>${playoffMatch(po('P-BR'),['Perdedor semifinal 1','Perdedor semifinal 2'])}</div>`;
  }
  function fixtures(filter='all'){
   const matches=data.partidos.filter(m=>m.fase==='liga');
@@ -62,7 +62,8 @@
  }
  if(page==='playoffs'){
   $('playoff-bracket').innerHTML=playoffBracket();
-  $('playoff-status').innerHTML=st.final?'<span class="tag">Liga finalizada · cruces fijados</span>':`<span class="tag">Liga en curso · ${st.played}/18 partidos</span>${st.unresolved?'<p>Hay un empate clasificatorio que debe resolver la organización.</p>':''}`;
+  const semis=data.partidos.filter(m=>m.id==='P-SF1'||m.id==='P-SF2');
+  $('playoff-status').innerHTML=semis.every(m=>m.local&&m.visitante)?'<span class="tag">Semifinales definidas por sorteo</span>':'<span class="tag">Semifinales pendientes de sorteo</span>';
   if(data._seedErrors.length)$('playoff-status').insertAdjacentHTML('beforeend',`<p class="admin-warning">${data._seedErrors.map(e).join('; ')}</p>`);
  }
  if(page==='equipos')$('teams-directory').innerHTML=data.equipos.map(r=>teamcard(r,true)).join('');

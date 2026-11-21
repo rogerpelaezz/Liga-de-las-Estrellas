@@ -41,7 +41,8 @@
     const a=m.local,b=m.visitante,players=playersOf(a,b),stored=raw(id)||m;
     const oldScore=Number.isInteger(stored.golesLocal),canScore=Boolean(a&&b);
     $('admin-match-form').innerHTML=`<form id="match-edit-form">
-      ${!canScore?'<p class="admin-warning">Todavía no se conocen los cruces. Puedes fijar fecha y hora, pero no introducir el marcador hasta que se resuelva la fase anterior.</p>':''}
+      ${!canScore?'<p class="admin-warning">Participantes pendientes. En semifinales, selecciona los equipos según el sorteo y guarda el acta antes de introducir el marcador.</p>':''}
+      ${id.startsWith('P-SF')?`<div class="form-section"><h3>Sorteo de semifinales</h3><p class="small-note">Elige los dos equipos que salieron emparejados. Cada equipo debe aparecer en una sola semifinal.</p><div class="form-grid"><label class="form-field"><span>Primer equipo</span><select name="draw-home">${opt('','Pendiente de sorteo',stored.local)}${teamOptions(stored.local)}</select></label><label class="form-field"><span>Segundo equipo</span><select name="draw-away">${opt('','Pendiente de sorteo',stored.visitante)}${teamOptions(stored.visitante)}</select></label></div></div>`:''}
       <div class="form-section"><h3>Marcador oficial</h3><div class="score-fields"><label class="form-field"><span>${esc(a?teamName(enriched,a):'Local por determinar')}</span><input name="goals-home" type="number" min="0" max="99" value="${oldScore?stored.golesLocal:''}" ${canScore?'':'disabled'} placeholder="–"></label><label class="form-field"><span>${esc(b?teamName(enriched,b):'Visitante por determinar')}</span><input name="goals-away" type="number" min="0" max="99" value="${oldScore?stored.golesVisitante:''}" ${canScore?'':'disabled'} placeholder="–"></label><label class="form-field"><span>Fecha</span><input name="match-date" type="date" value="${esc(stored.fecha||'')}"></label><label class="form-field"><span>Hora</span><input name="match-time" type="time" value="${esc(stored.hora||'')}"></label></div></div>
       <div class="form-section"><h3>Desempate (solo playoffs)</h3><label class="form-field"><span>Ganador tras el desempate si el resultado es igualado</span><select name="tiebreak" ${m.fase==='liga'?'disabled':''}>${opt('','Por determinar / no aplicable',stored.ganadorDesempate)}${a?opt(a,teamName(enriched,a),stored.ganadorDesempate):''}${b?opt(b,teamName(enriched,b),stored.ganadorDesempate):''}</select></label></div>
       <div class="form-section"><h3>Porteros</h3><div class="form-grid"><label class="form-field"><span>Portero de ${esc(teamName(enriched,a))}</span><select name="keeper-home">${playerOptions(playersOf(a),stored.porteros?.local,'Sin registrar')}</select></label><label class="form-field"><span>Portero de ${esc(teamName(enriched,b))}</span><select name="keeper-away">${playerOptions(playersOf(b),stored.porteros?.visitante,'Sin registrar')}</select></label></div><p class="small-note">Trofeo Zamora: esta versión presupone un único portero por equipo durante cada partido. No permite repartir goles entre sustitutos.</p></div>
@@ -58,6 +59,15 @@
     if(!m||!display)return;
     const input=name=>form.elements.namedItem(name);
     const gh=input('goals-home').value,ga=input('goals-away').value;
+    const drawnHome=input('draw-home')?.value||null,drawnAway=input('draw-away')?.value||null;
+    const drawChanged=id.startsWith('P-SF')&&(drawnHome!==m.local||drawnAway!==m.visitante);
+    if(id.startsWith('P-SF')){
+      if(Boolean(drawnHome)!==Boolean(drawnAway)){showToast('Selecciona ambos equipos de la semifinal o deja el sorteo pendiente.');return;}
+      if(drawnHome&&drawnHome===drawnAway){showToast('Un equipo no puede jugar contra sí mismo.');return;}
+      const other=raw(id==='P-SF1'?'P-SF2':'P-SF1');
+      if([drawnHome,drawnAway].some(team=>team&&[other?.local,other?.visitante].includes(team))){showToast('Cada equipo solo puede aparecer en una semifinal.');return;}
+      if(drawChanged&&(gh!==''||m.eventos?.length||m.participantes?.length)){showToast('Borra primero el marcador y los eventos antes de cambiar un cruce ya disputado.');return;}
+    }
     if((gh==='')!==(ga==='')){showToast('Introduce los dos marcadores o deja ambos vacíos.');return;}
     if(gh!==''&&(!display.local||!display.visitante)){showToast('Los participantes del playoff aún no están determinados.');return;}
     const n=val=>val===''?null:Number(val);
@@ -79,7 +89,8 @@
     if(gh!==''&&goalEvents>Number(gh)+Number(ga)){showToast('Hay más goles registrados en eventos que goles en el marcador.');return;}
     m.fecha=input('match-date').value||null;m.hora=input('match-time').value||null;
     m.golesLocal=n(gh);m.golesVisitante=n(ga);m.ganadorDesempate=tiebreak;
-    m.local=display.local||m.local;m.visitante=display.visitante||m.visitante;
+    if(id.startsWith('P-SF')){m.local=drawnHome;m.visitante=drawnAway;}
+    else{m.local=display.local||null;m.visitante=display.visitante||null;}
     m.porteros={local:input('keeper-home').value||null,visitante:input('keeper-away').value||null};
     const checked=[...form.querySelectorAll('[name=participants]:checked')].map(x=>x.value);
     m.participantes=[...new Set([...checked,...events.map(x=>x.jugador),...events.map(x=>x.asistente).filter(Boolean),...Object.values(m.porteros).filter(Boolean)])];

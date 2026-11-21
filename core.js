@@ -35,14 +35,17 @@
     const sorted=standings(data),league=data.partidos.filter(m=>m.fase==='liga');
     const byId=Object.fromEntries(data.partidos.filter(m=>m.fase==='playoff').map(m=>[m.id,m]));
     const po=ids.map(id=>({...makePlayoff(id),...(byId[id]||{})}));
-    if(sorted.final){
-      po[0].local=sorted.rows[0].id;po[0].visitante=sorted.rows[3].id;
-      po[1].local=sorted.rows[1].id;po[1].visitante=sorted.rows[2].id;
-      if(winner(po[0])&&winner(po[1])){
-        po[2].local=loser(po[0]);po[2].visitante=loser(po[1]);
-        po[3].local=winner(po[0]);po[3].visitante=winner(po[1]);
-      }
-    } else { po.forEach(p=>{p.local=null;p.visitante=null;}); }
+    // Los emparejamientos de semifinales se guardan tras el sorteo, sin depender de la clasificación.
+    const validTeams=new Set(data.equipos.map(t=>t.id));
+    for(const p of po.slice(0,2)){
+      if(!validTeams.has(p.local))p.local=null;
+      if(!validTeams.has(p.visitante)||p.visitante===p.local)p.visitante=null;
+    }
+    const semisDecided=winner(po[0])&&winner(po[1]);
+    po[2].local=semisDecided?loser(po[0]):null;
+    po[2].visitante=semisDecided?loser(po[1]):null;
+    po[3].local=semisDecided?winner(po[0]):null;
+    po[3].visitante=semisDecided?winner(po[1]):null;
     const seedErrors=[];
     for(const p of po){
       const old=byId[p.id];
