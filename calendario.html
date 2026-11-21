@@ -10,7 +10,12 @@
 <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="site.css?v=logo-izquierda-4">
 <script src="data.js?v=calendario-1" defer></script><script src="core.js" defer></script><script src="site.js?v=escudos-1" defer></script>
 <link rel="icon" type="image/png" href="assets/balon-estrellas.png?v=2">
-</head><body data-page="calendario">
+<style>
+body[data-page="calendario"] .page-hero{background-color:#101b2d;background-image:linear-gradient(90deg,#101b2d 0%,rgba(16,27,45,.96) 22%,rgba(16,27,45,.7) 49%,rgba(16,27,45,.16) 100%),linear-gradient(180deg,#101b2d 0%,transparent 20%,transparent 72%,#101b2d 100%),url("assets/fondo-calendario.jpg");background-size:cover;background-position:center,center,center 50%;background-repeat:no-repeat;min-height:350px;display:flex;align-items:center}
+body[data-page="calendario"] .page-hero .container{position:relative;z-index:1}
+body[data-page="calendario"] .page-hero h1,body[data-page="calendario"] .page-hero p{text-shadow:0 2px 18px rgba(0,0,0,.4)}
+@media(max-width:700px){body[data-page="calendario"] .page-hero{min-height:330px;background-image:linear-gradient(90deg,rgba(16,27,45,.96),rgba(16,27,45,.55)),linear-gradient(180deg,#101b2d 0%,transparent 25%,transparent 70%,#101b2d 100%),url("assets/fondo-calendario.jpg");background-position:center,center,58% 45%}}
+</style></head><body data-page="calendario">
 <div class="announcement"><span class="pulse"></span> TEMPORADA 2026/27 <span class="announcement-line"></span> I EDICIÓN DEL CAMPEONATO</div>
 <header class="site-header"><div class="container header-inner">
 <a class="brand" href="index.html" aria-label="Inicio, I Liga de las Estrellas"><span class="brand-mark" aria-hidden="true"><img src="assets/balon-estrellas.png" alt=""></span><span class="brand-name">LIGA <em>DE LAS</em> ESTRELLAS<small>FÚTBOL 7 · PRIMERA EDICIÓN</small></span></a>
