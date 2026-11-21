@@ -30,6 +30,11 @@ body[data-page="playoffs"] .bracket-semis .bracket-match::after{content:"";posit
 body[data-page="playoffs"] .bracket-semis::after{content:"";position:absolute;right:-45px;top:27%;bottom:22%;border-right:2px solid #c8ac69}
 body[data-page="playoffs"] .bracket-final::before{content:"";position:absolute;right:100%;top:55%;width:45px;border-top:2px solid #c8ac69}
 @media(max-width:760px){body[data-page="playoffs"] .playoff-bracket{grid-template-columns:minmax(0,1fr);gap:28px;padding:22px 16px}body[data-page="playoffs"] .bracket-semis,body[data-page="playoffs"] .bracket-final,body[data-page="playoffs"] .bracket-bronze{grid-column:1;grid-row:auto}body[data-page="playoffs"] .bracket-semis::after,body[data-page="playoffs"] .bracket-semis .bracket-match::after,body[data-page="playoffs"] .bracket-final::before{display:none}body[data-page="playoffs"] .bracket-bronze{padding-top:24px}}
+</style><style>
+body[data-page="playoffs"] .page-hero{background-color:#101b2d;background-image:linear-gradient(90deg,#101b2d 0%,rgba(16,27,45,.96) 23%,rgba(16,27,45,.73) 46%,rgba(16,27,45,.18) 100%),linear-gradient(180deg,#101b2d 0%,transparent 23%,transparent 72%,#101b2d 100%),url("assets/fondo-playoffs.jpg");background-size:cover;background-position:center,center,center 56%;background-repeat:no-repeat;min-height:350px;display:flex;align-items:center}
+body[data-page="playoffs"] .page-hero .container{position:relative;z-index:1}
+body[data-page="playoffs"] .page-hero h1,body[data-page="playoffs"] .page-hero p{text-shadow:0 2px 16px rgba(0,0,0,.35)}
+@media(max-width:700px){body[data-page="playoffs"] .page-hero{min-height:330px;background-image:linear-gradient(90deg,rgba(16,27,45,.96),rgba(16,27,45,.55)),linear-gradient(180deg,#101b2d 0%,transparent 25%,transparent 70%,#101b2d 100%),url("assets/fondo-playoffs.jpg");background-position:center,center,62% 52%}}
 </style></head><body data-page="playoffs">
 <div class="announcement"><span class="pulse"></span> TEMPORADA 2026/27 <span class="announcement-line"></span> I EDICIÓN DEL CAMPEONATO</div>
 <header class="site-header"><div class="container header-inner">
