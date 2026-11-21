@@ -9,7 +9,7 @@
  const initials=name=>String(name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
  const safePhoto=src=>typeof src==='string' && (/^data:image\/(?:webp|jpeg|png);base64,[a-z0-9+/=]+$/i.test(src)||/^assets\/jugadores\/[a-z0-9_.-]+\.(?:webp|png|jpg|jpeg)$/i.test(src))?src:null;
  const metrics=(list)=>list.map(x=>`<div class="metric"><b>${e(x[0])}</b><span>${e(x[1])}</span></div>`).join('');
- const leagueKPIs=()=>metrics([[st.played+'/12','PARTIDOS DISPUTADOS'],[data.equipos.length,'EQUIPOS PARTICIPANTES'],['6','JORNADAS DE LIGA'],['4','PARTIDOS DE PLAYOFFS']]);
+ const leagueKPIs=()=>metrics([[st.played+'/18','PARTIDOS DISPUTADOS'],[data.equipos.length,'EQUIPOS PARTICIPANTES'],['9','JORNADAS DE LIGA'],['4','PARTIDOS DE PLAYOFFS']]);
  const currentResults=data.partidos.filter(m=>m.fase==='liga'&&score(m));
  function leagueTable(compact=false){return `<table class="league-table"><thead><tr><th>POS</th><th>EQUIPO</th><th>PJ</th><th>${compact?'DG':'PG'}</th>${compact?'':'<th>PE</th><th>PP</th><th>GF</th><th>GC</th><th>DG</th>'}<th>PTS</th></tr></thead><tbody>`+st.rows.map((r,i)=>`<tr><td><span class="pos-chip ${i===0&&st.played>0?'top':''}">${i+1}</span></td><td><span class="team-title">${compact?'':logo(r.id)}<strong>${e(r.corto)}</strong></span></td><td>${r.pj}</td><td>${compact?(r.dg>0?'+':'')+r.dg:r.pg}</td>${compact?'':`<td>${r.pe}</td><td>${r.pp}</td><td>${r.gf}</td><td>${r.gc}</td><td>${r.dg>0?'+':''}${r.dg}</td>`}<td>${r.pts}</td></tr>`).join('')+'</tbody></table>'}
  const outcome=m=>score(m)?`<span class="mini-score">${m.golesLocal} : ${m.golesVisitante}</span>`:'<span class="muted">VS</span>';
@@ -36,7 +36,7 @@
  }
  function fixtures(filter='all'){
   const matches=data.partidos.filter(m=>m.fase==='liga');
-  const rounds=[1,2,3,4,5,6].filter(i=>filter==='all'||(filter==='1'?i<=3:i>=4));
+  const rounds=[1,2,3,4,5,6,7,8,9].filter(i=>filter==='all'||(filter==='1'?i<=3:filter==='2'?i<=6:i>=7));
   return rounds.map(round=>{
    const pair=matches.filter(m=>m.jornada===round),date=pair[0]?.fecha;
    return `<article class="fixture-card"><div class="fixture-header"><strong>JORNADA ${round}</strong><small>${date?e(C.formatDate(date)):'Fecha por confirmar'}</small></div><div class="fixture-body">${pair.map(m=>`<div class="fixture-match"><time>${e(m.hora||'--:--')}</time><span class="fixture-team fixture-local">${e(teamName(m.local))}</span><span class="fixture-score ${score(m)?'played':''}">${score(m)?`${m.golesLocal} - ${m.golesVisitante}`:'vs'}</span><span class="fixture-team fixture-visitor">${e(teamName(m.visitante))}</span></div>`).join('')}</div></article>`;
@@ -50,7 +50,7 @@
   $('home-playoffs').innerHTML=`<div class="playoff-bracket">${playoffBracket()}</div>`;
  }
  if(page==='liga'){
-  $('league-kpis').innerHTML=leagueKPIs();$('league-table').innerHTML=leagueTable();$('league-progress').textContent=`${st.played} de 12 disputados`;
+  $('league-kpis').innerHTML=leagueKPIs();$('league-table').innerHTML=leagueTable();$('league-progress').textContent=`${st.played} de 18 disputados`;
   $('league-results').innerHTML=currentResults.length?currentResults.slice(-5).reverse().map(matchline).join(''):'<p class="empty-note">Todavía no se han disputado encuentros.</p>';
  }
  if(page==='calendario'){
@@ -62,7 +62,7 @@
  }
  if(page==='playoffs'){
   $('playoff-bracket').innerHTML=playoffBracket();
-  $('playoff-status').innerHTML=st.final?'<span class="tag">Liga finalizada · cruces fijados</span>':`<span class="tag">Liga en curso · ${st.played}/12 partidos</span>${st.unresolved?'<p>Hay un empate clasificatorio que debe resolver la organización.</p>':''}`;
+  $('playoff-status').innerHTML=st.final?'<span class="tag">Liga finalizada · cruces fijados</span>':`<span class="tag">Liga en curso · ${st.played}/18 partidos</span>${st.unresolved?'<p>Hay un empate clasificatorio que debe resolver la organización.</p>':''}`;
   if(data._seedErrors.length)$('playoff-status').insertAdjacentHTML('beforeend',`<p class="admin-warning">${data._seedErrors.map(e).join('; ')}</p>`);
  }
  if(page==='equipos')$('teams-directory').innerHTML=data.equipos.map(r=>teamcard(r,true)).join('');
