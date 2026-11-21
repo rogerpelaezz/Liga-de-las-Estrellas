@@ -79,7 +79,7 @@
           <a href="calendario.html" class="profile-text-link">Ver calendario completo ↗</a></section>
         <section class="panel profile-matches"><div class="profile-section-heading"><span class="section-index">ASÍ TE HA IDO</span><h3>TUS ÚLTIMOS <em>RESULTADOS.</em></h3></div>
           ${matches.last.length?matches.last.map(m=>matchRow(m,p.equipo)).join(''):'<p class="picker-empty">Todavía no hay partidos oficiales disputados por tu equipo.</p>'}
-          <a href="href="estadisticas.html" target="_blank" rel="noopener"" class="profile-text-link">Ver los premios individuales ↗</a></section>
+          <a href="estadisticas.html" target="_blank" rel="noopener" class="profile-text-link">Ver los premios individuales ↗</a></section>
       </div>
       <div class="profile-footer-notice">Los partidos jugados se calculan a partir de los jugadores registrados en cada acta. Los goles, asistencias y tarjetas solo aparecen cuando los administradores los introducen. Elegir un nombre no verifica la identidad del visitante.</div>`;
     $('player-picker').hidden=true;
