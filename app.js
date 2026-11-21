@@ -132,7 +132,7 @@
     $('#stat-goals').textContent = stats.goals;
     $('#stat-assists').textContent = stats.assists;
     $('#stat-yellows').textContent = stats.yellows;
-    const countTotal = state.phase==='total'?16:state.phase==='liga'?12:4;
+    const countTotal = state.phase==='total'?22:state.phase==='liga'?18:4;
     $('#stat-matches').innerHTML = `${stats.completed.length}<span class="count-total">/${countTotal}</span>`;
     const status=$('#data-status');
     status.textContent=state.demo?'EJEMPLO FICTICIO':'OFICIALES';
