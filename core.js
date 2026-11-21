@@ -21,7 +21,7 @@
     rows.sort((a,b)=>b.pts-a.pts||b.dg-a.dg||b.gf-a.gf||a.nombre.localeCompare(b.nombre,'es'));
     const played=matches.filter(score).length;
     const unresolved=played===matches.length&&rows.some((r,i)=>i>0&&r.pts===rows[i-1].pts&&r.dg===rows[i-1].dg&&r.gf===rows[i-1].gf);
-    return {rows,played,total:matches.length,final:matches.length===12&&played===12&&!unresolved,unresolved};
+    return {rows,played,total:matches.length,final:matches.length===18&&played===18&&!unresolved,unresolved};
   }
   function winner(m){
     if(!m||!m.local||!m.visitante||!score(m))return null;
