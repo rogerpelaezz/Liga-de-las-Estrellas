@@ -333,3 +333,5 @@ body[data-page="equipos"] .page-hero .container{position:relative;z-index:1}
 .playoff-bracket .bracket-final .match-label{background:#19334f;color:#f6d991}
 .playoff-bracket .bracket-label{letter-spacing:.1em}
 @media(max-width:700px){.playoff-bracket{grid-template-columns:minmax(0,1fr)}.playoff-bracket .bracket-semis,.playoff-bracket .bracket-final,.playoff-bracket .bracket-bronze{grid-column:1;grid-row:auto;padding-top:0}.playoff-bracket .bracket-bronze{padding-top:20px}.playoff-bracket .bracket-final{margin-top:8px}}
+/* El contorno mantiene visible la franja blanca de Crystal sobre las tarjetas claras. */
+.team-card .team-color{box-shadow:0 0 0 1px rgba(28,46,68,.2)}

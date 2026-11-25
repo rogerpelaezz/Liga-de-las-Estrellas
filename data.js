@@ -1,8 +1,8 @@
 /*
   I LIGA DE LAS ESTRELLAS | Datos oficiales
   ---------------------------------------------------------------
-  Todos los marcadores están sin disputar (null), y las plantillas
-  pendientes hasta que la organización las confirme.
+  Los partidos disputados se registran con sus goles y porteros, incluidos los aún sin identificar.
+  Algunos nombres y plantillas siguen pendientes de confirmar.
 
   Al cerrar un partido, rellena golesLocal y golesVisitante.
   Para calcular premios individuales, rellena además:
@@ -27,10 +27,10 @@ window.LIGA_DATA = {
     puntosRojaDirecta: 3
   },
   equipos: [
-    { id: 'bayern', nombre: 'Bayern de los Caídos', corto: 'Bayern', sigla: 'BYN', color: '#d34c48' },
-    { id: 'crystal', nombre: 'Crystal & Cubata', corto: 'Crystal', sigla: 'CRC', color: '#6b88b7' },
-    { id: 'aston', nombre: 'Aston Birra', corto: 'Aston Birra', sigla: 'AST', color: '#52ad84' },
-    { id: 'cultural', nombre: 'Cultural y Alcohólica Leonesa', corto: 'Cultural', sigla: 'CUL', color: '#343d49' }
+    { id: 'bayern', nombre: 'Bayern de los Caídos', corto: 'Bayern', sigla: 'BYN', color: '#d93038' },
+    { id: 'crystal', nombre: 'Crystal & Cubata', corto: 'Crystal', sigla: 'CRC', color: '#ffffff' },
+    { id: 'aston', nombre: 'Aston Birra', corto: 'Aston Birra', sigla: 'AST', color: '#239b58' },
+    { id: 'cultural', nombre: 'Cultural y Alcohólica Leonesa', corto: 'Cultural', sigla: 'CUL', color: '#111111' }
   ],
   jugadores: [
     { id:'bayern-1', nombre:"Miguel Ángel Rojas", equipo:'bayern', posicion:'JUG', dorsal:null, foto:null, capitan:true },
@@ -74,6 +74,7 @@ window.LIGA_DATA = {
     { id:'aston-11', nombre:"Jorge Moreno", equipo:'aston', posicion:'JUG', dorsal:null, foto:null },
     { id:'aston-12', nombre:"Nabil Essalama", equipo:'aston', posicion:'JUG', dorsal:null, foto:null },
     { id:'aston-13', nombre:"Antonio Valero", equipo:'aston', posicion:'JUG', dorsal:null, foto:null },
+    { id:'aston-14', nombre:"Antonio G. (pendiente de confirmar)", equipo:'aston', posicion:'JUG', dorsal:null, foto:null },
     { id:'cultural-1', nombre:"Javier Briñas", equipo:'cultural', posicion:'JUG', dorsal:null, foto:null, capitan:true },
     { id:'cultural-2', nombre:"Javier De la Fuente", equipo:'cultural', posicion:'JUG', dorsal:null, foto:null, capitan:true },
     { id:'cultural-3', nombre:"Alberto Laguna", equipo:'cultural', posicion:'POR', dorsal:null, foto:null },
@@ -89,8 +90,30 @@ window.LIGA_DATA = {
     { id:'cultural-13', nombre:"Andrés Gómez “Andy”", equipo:'cultural', posicion:'JUG', dorsal:null, foto:null }
   ],
   partidos: [
-    { id:'L1A', fase:'liga', jornada:1, fecha:'2026-11-23', hora:'20:00', local:'bayern', visitante:'crystal' },
-    { id:'L1B', fase:'liga', jornada:1, fecha:'2026-11-23', hora:'21:00', local:'aston', visitante:'cultural' },
+    { id:'L1A', fase:'liga', jornada:1, fecha:'2026-11-23', hora:'20:00', local:'bayern', visitante:'crystal',
+      golesLocal:3, golesVisitante:4,
+      porteros:{local:'bayern-3',visitante:'crystal-3'},
+      participantes:['bayern-3','bayern-12','bayern-2','bayern-11','crystal-3','crystal-6','crystal-8'],
+      eventos:[
+        {tipo:'gol',jugador:'bayern-12',asistente:null},
+        {tipo:'gol',jugador:'bayern-2',asistente:null},
+        {tipo:'gol',jugador:'bayern-11',asistente:null},
+        {tipo:'gol',jugador:'crystal-6',asistente:null},
+        {tipo:'gol',jugador:'crystal-6',asistente:null},
+        {tipo:'gol',jugador:'crystal-6',asistente:null},
+        {tipo:'gol',jugador:'crystal-8',asistente:null}
+      ] },
+    { id:'L1B', fase:'liga', jornada:1, fecha:'2026-11-23', hora:'21:00', local:'aston', visitante:'cultural',
+      golesLocal:2, golesVisitante:3,
+      porteros:{local:'aston-3',visitante:'cultural-3'},
+      participantes:['aston-3','aston-2','aston-14','cultural-3','cultural-12','cultural-2','cultural-8'],
+      eventos:[
+        {tipo:'gol',jugador:'aston-2',asistente:null},
+        {tipo:'gol',jugador:'aston-14',asistente:null},
+        {tipo:'gol',jugador:'cultural-12',asistente:null},
+        {tipo:'gol',jugador:'cultural-2',asistente:null},
+        {tipo:'gol',jugador:'cultural-8',asistente:null}
+      ] },
     { id:'L2A', fase:'liga', jornada:2, fecha:'2026-11-30', hora:'20:00', local:'cultural', visitante:'bayern' },
     { id:'L2B', fase:'liga', jornada:2, fecha:'2026-11-30', hora:'21:00', local:'crystal', visitante:'aston' },
     { id:'L3A', fase:'liga', jornada:3, fecha:'2026-12-14', hora:'20:00', local:'bayern', visitante:'aston' },
@@ -114,5 +137,5 @@ window.LIGA_DATA = {
     { id:'P-SF2', fase:'playoff', jornada:10, fecha:null, hora:'21:00', local:null, visitante:null },
     { id:'P-BR', fase:'playoff', jornada:11, fecha:null, hora:'20:00', local:null, visitante:null },
     { id:'P-FI', fase:'playoff', jornada:11, fecha:null, hora:'21:00', local:null, visitante:null }
-  ].map(p => ({ ...p, golesLocal:null, golesVisitante:null, ganadorDesempate:null, participantes:[], porteros:{local:null,visitante:null}, eventos:[] }))
+  ].map(p => ({ golesLocal:null, golesVisitante:null, ganadorDesempate:null, participantes:[], porteros:{local:null,visitante:null}, eventos:[], ...p }))
 };

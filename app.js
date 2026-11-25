@@ -149,7 +149,7 @@
   function renderRankings(data, stats) {
     $('#ranking-tables').innerHTML=awards.map(award=>{
       const rank=stats.rankings[award.key];
-      const display=rank.slice(0,6);
+      const display=rank.slice(0,award.key==='zamora'?data.equipos.length:6);
       let content;
       if (!rank.length){
         content=`<div class="empty-state"><div class="empty-icon">✳</div><strong>Aquí aún no hay nombres.</strong><p>${state.demo?'Cambia a otra fase para ver los partidos de ejemplo.':'Cuando se registren jugadores y actas, la clasificación aparecerá automáticamente.'}</p></div>`;
@@ -159,9 +159,9 @@
           const value=award.key==='zamora'?player.media.toFixed(2).replace('.',',') : award.key==='pichichi'?player.goles : award.key==='asistencias'?player.asistencias : player.puntos;
           const secondary=award.key==='zamora'&&!player.elegibleZamora?' · NO OPTA':award.key==='sucio'?` · ${player.amarillas}A / ${player.rojas}R`:'';
           const pj=award.key==='zamora'?player.partidosPortero:player.partidos;
-          return `<tr><td><span class="ranking-position">${String(index+1).padStart(2,'0')}</span></td><td><span class="player-name">${escapeHTML(player.nombre)}</span><span class="player-team"><i class="player-team-bullet" style="--color:${safeColor(team.color)}"></i>${escapeHTML(team.corto)}${secondary}</span></td><td>${pj}</td><td>${value}</td></tr>`;
+          return `<tr><td><span class="ranking-position">${String(index+1).padStart(2,'0')}</span></td><td><span class="player-name">${escapeHTML(player.nombre)}</span><span class="player-team"><i class="player-team-bullet" style="--color:${safeColor(team.color)}"></i>${escapeHTML(team.corto)}${secondary}</span></td><td>${pj}</td>${award.key==='zamora'?`<td>${player.encajados}</td>`:''}<td>${value}</td></tr>`;
         }).join('');
-        content=`<table class="ranking-table"><thead><tr><th>POS.</th><th>JUGADOR / EQUIPO</th><th>PJ</th><th>${award.column}</th></tr></thead><tbody>${rows}</tbody></table>`;
+        content=`<table class="ranking-table ${award.key==='zamora'?'zamora-table':''}"><thead><tr><th>POS.</th><th>JUGADOR / EQUIPO</th><th>PJ</th>${award.key==='zamora'?'<th>GC</th>':''}<th>${award.column}</th></tr></thead><tbody>${rows}</tbody></table>`;
       }
       const extra=award.key==='zamora'?` Mínimo: ${stats.minimumGK} partido${stats.minimumGK===1?'':'s'}.`:'';
       return `<article class="ranking-card"><div class="ranking-head"><div><h3>${award.rankTitle}</h3><p>${award.rankDesc}</p></div><div class="ranking-icon" style="--accent:${award.color==='red'?'#dd797d':award.color==='cyan'?'#45a8bd':award.color==='purple'?'#8a7fd5':'#c09e5b'}">${ICONS[award.key]}</div></div>${content}<div class="ranking-footer">${award.footer}${extra}</div></article>`;
